@@ -1,15 +1,15 @@
-package com.customwrld.bot.commands;
+package com.customwrld.bot.commandapi.commands;
 
 import com.customwrld.bot.commandapi.CommandContext;
+import com.customwrld.bot.commandapi.CommandPermission;
 import com.customwrld.bot.commandapi.ICommand;
 import com.customwrld.bot.util.Util;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 
 public class PingCommand implements ICommand {
 
     @Override
-    public Permission permission() {
+    public CommandPermission permission() {
         return null;
     }
 
@@ -28,7 +28,12 @@ public class PingCommand implements ICommand {
         JDA jda = ctx.getJDA();
 
         jda.getRestPing().queue(
-                (ping) -> Util.sendEmbed(ctx.getChannel(), ctx.getAuthor(), "**Bot Latency**", ":hourglass_flowing_sand: **Rest Ping:** " + ping + "\n:desktop: **Gateway Ping:** " + jda.getGatewayPing())
+                (ping) -> Util.sendEmbed(
+                        ctx.getChannel(),
+                        ctx.getAuthor(),
+                        "**Bot Latency**",
+                        ":hourglass_flowing_sand: ｜ **Rest Ping:** " + ping + "ms \n:desktop: ｜ **Gateway Ping:** " + jda.getGatewayPing() + "ms \n:signal_strength: ｜ **Atom Response Time:** 1ms"
+                )
         );
     }
 }

@@ -2,8 +2,7 @@ package com.customwrld.bot.commandapi;
 
 import com.customwrld.bot.Bot;
 import com.customwrld.bot.util.Logger;
-import com.customwrld.bot.util.enums.EmbedTemplate;
-import com.customwrld.bot.util.enums.LogType;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.message.guild.GuildMessageReceivedEvent;
 import org.reflections.Reflections;
@@ -28,10 +27,10 @@ public class CommandManager {
                     continue;
                 ICommand command = (ICommand) aClass.getDeclaredConstructor().newInstance();
                 addCommand(command);
-                Logger.log(LogType.COMMAND, command.commandName().toUpperCase() + " Command has successfully been registered!");
+                Logger.log(Logger.LogType.COMMAND, command.commandName().toUpperCase() + " Command has successfully been registered!");
             }
         } catch (Exception exception) {
-            Logger.log(LogType.ERROR, "An exception has occurred when trying to register a command!");
+            Logger.log(Logger.LogType.ERROR, "An exception has occurred when trying to register a command!");
         }
     }
 
@@ -67,22 +66,22 @@ public class CommandManager {
                 .replaceFirst("(?i)" + Pattern.quote(Bot.getInstance().getConfig().getBotPrefix()), "")
                 .split("\\s+");
 
+        Member member = event.getMember();
         String invoke = split[0].toLowerCase();
         ICommand cmd = this.getCommand(invoke);
 
-        if (cmd != null && event.getMember() != null) {
+        if (cmd != null && member != null) {
             TextChannel channel = event.getChannel();
 
-            channel.sendTyping().queue();
+            CommandPermission permission = cmd.permission();
 
-            if(cmd.permission() != null) {
-                if(!event.getMember().hasPermission(cmd.permission())) {
-                    EmbedTemplate.PERMISSION_EXCEPTION.send(channel, event.getAuthor(), cmd.permission().getName());
+            if(permission != null) {
+                if(!permission.handlePermission(member, channel)) {
                     return;
                 }
             }
 
-            List<String> args = Arrays.asList(split).subList(1, split.length);
+            String[] args = Arrays.copyOfRange(split, 1, split.length);
 
             CommandContext ctx = new CommandContext(event, args);
 

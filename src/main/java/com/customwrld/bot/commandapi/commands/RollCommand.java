@@ -28,7 +28,7 @@
 //    }
 //
 //    @Override
-//    public Permission permission() {
+//    public CommandPermission permission() {
 //        return Permission.ADMINISTRATOR;
 //    }
 //

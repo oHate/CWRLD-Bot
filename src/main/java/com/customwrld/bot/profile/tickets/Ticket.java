@@ -1,4 +1,4 @@
-package com.customwrld.bot.tickets;
+package com.customwrld.bot.profile.tickets;
 
 import com.customwrld.bot.Bot;
 import com.mongodb.client.MongoCollection;
@@ -13,17 +13,15 @@ import java.util.Map;
 
 public class Ticket {
 
-    @Getter private static Map<String, Ticket> activeTickets = new HashMap<>();
+    @Getter private static final Map<String, Ticket> activeTickets = new HashMap<>();
     @Getter private static final MongoCollection<Document> collection = Bot.getInstance().getMongoDatabase().getCollection("tickets");
 
     @Getter String discordId;
     @Getter @Setter String channelId;
-    @Getter @Setter String reactionMessageId;
 
-    public Ticket(String discordId, String channelId, String reactionMessageId) {
+    public Ticket(String discordId, String channelId) {
         this.discordId = discordId;
         this.channelId = channelId;
-        this.reactionMessageId = reactionMessageId;
     }
 
     public boolean isValid() {
@@ -50,7 +48,7 @@ public class Ticket {
         Document document = collection.find(new Document("discordId", discordId)).first();
 
         if(document != null) {
-            return new Ticket(document.getString("discordId"), document.getString("channelId"), document.getString("reactionMessageId"));
+            return new Ticket(document.getString("discordId"), document.getString("channelId"));
         }
 
         return null;
@@ -60,7 +58,6 @@ public class Ticket {
         Document document = new Document();
         document.put("discordId", discordId);
         document.put("channelId", channelId);
-        document.put("reactionMessageId", reactionMessageId);
 
         collection.replaceOne(Filters.eq("discordId", discordId), document, new ReplaceOptions().upsert(true));
     }

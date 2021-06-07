@@ -1,4 +1,4 @@
-package com.customwrld.bot.punishment;
+package com.customwrld.bot.profile.punishment;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

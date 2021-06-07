@@ -1,4 +1,4 @@
-package com.customwrld.bot.punishment;
+package com.customwrld.bot.profile.punishment;
 
 import com.customwrld.bot.util.TimeUtil;
 import com.customwrld.bot.util.Util;

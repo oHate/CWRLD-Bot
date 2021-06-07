@@ -1,17 +1,17 @@
-package com.customwrld.bot.commands;
+package com.customwrld.bot.commandapi.commands;
 
 import com.customwrld.bot.commandapi.CommandContext;
+import com.customwrld.bot.commandapi.CommandPermission;
 import com.customwrld.bot.commandapi.ICommand;
 import com.customwrld.bot.util.Util;
 import net.dv8tion.jda.api.EmbedBuilder;
-import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.User;
 
 public class GuildInfoCommand implements ICommand {
 
     @Override
-    public Permission permission() {
+    public CommandPermission permission() {
         return null;
     }
 

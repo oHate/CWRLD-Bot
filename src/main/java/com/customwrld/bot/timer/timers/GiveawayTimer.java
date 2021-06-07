@@ -1,4 +1,4 @@
-package com.customwrld.bot.timers;
+package com.customwrld.bot.timer.timers;
 
 import com.customwrld.bot.Bot;
 import com.customwrld.bot.config.Config;
@@ -7,7 +7,6 @@ import com.customwrld.bot.timer.api.TimerType;
 import com.customwrld.bot.giveaway.Giveaway;
 import com.customwrld.bot.util.Logger;
 import com.customwrld.bot.util.TimeUtil;
-import com.customwrld.bot.util.enums.LogType;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -60,7 +59,7 @@ public class GiveawayTimer extends Timer {
         TextChannel channel = guild.getTextChannelById(giveaway.getChannelId());
 
         if(channel != null) {
-            channel.retrieveMessageById(giveaway.getMessageId()).queue(giveaway::drawWinner, (error) -> Logger.log(LogType.ERROR, "Giveaway was marked as NULL."));
+            channel.retrieveMessageById(giveaway.getMessageId()).queue(giveaway::drawWinner, (error) -> Logger.log(Logger.LogType.WARNING, "Giveaway was marked as NULL."));
         }
     }
 

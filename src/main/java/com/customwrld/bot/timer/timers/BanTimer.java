@@ -1,26 +1,22 @@
-package com.customwrld.bot.timers;
+package com.customwrld.bot.timer.timers;
 
 import com.customwrld.bot.Bot;
-import com.customwrld.bot.config.Config;
 import com.customwrld.bot.timer.api.Timer;
 import com.customwrld.bot.timer.api.TimerType;
 import com.customwrld.bot.profile.Profile;
-import com.customwrld.bot.punishment.Punishment;
+import com.customwrld.bot.profile.punishment.Punishment;
 import com.customwrld.bot.util.Logger;
-import com.customwrld.bot.util.enums.LogType;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.exceptions.ErrorHandler;
 import net.dv8tion.jda.api.requests.ErrorResponse;
 
-public class MuteTimer extends Timer {
+public class BanTimer extends Timer {
 
-    private final Profile profile;
-    private final Punishment punishment;
+    private Profile profile;
+    private Punishment punishment;
     private Guild guild;
-    private Config config;
 
-    public MuteTimer(Profile profile, Punishment punishment) {
+    public BanTimer(Profile profile, Punishment punishment) {
         super(TimerType.COUNTDOWN, Bot.getInstance().getTimerManager());
         setDuration(punishment.getMillisRemaining());
         this.profile = profile;
@@ -34,7 +30,6 @@ public class MuteTimer extends Timer {
     public void onStart() {
         Bot bot = Bot.getInstance();
         this.guild = bot.getGuild();
-        this.config = bot.getConfig();
     }
 
     @Override
@@ -47,15 +42,9 @@ public class MuteTimer extends Timer {
             profile.save();
         }
 
-        ErrorHandler UNKNOWN_MEMBER = new ErrorHandler().handle(ErrorResponse.UNKNOWN_MEMBER, (error) -> Logger.log(LogType.WARNING, "[" + profile.getDiscordId() + "] UNKNOWN MEMBER."));
+        ErrorHandler UNKNOWN_BAN = new ErrorHandler().handle(ErrorResponse.UNKNOWN_BAN, (error) -> Logger.log(Logger.LogType.WARNING, "[" + profile.getDiscordId() + "] UNKNOWN BAN."));
 
-        this.guild.retrieveMemberById(this.profile.getDiscordId()).queue(member -> {
-            Role role = this.guild.getRoleById(this.config.getMutedRole());
-
-            if(role != null && member.getRoles().contains(role)) {
-                this.guild.removeRoleFromMember(member, role).queue();
-            }
-        }, UNKNOWN_MEMBER);
+        guild.retrieveBanById(profile.getDiscordId()).queue(ban -> guild.unban(ban.getUser()).queue(), UNKNOWN_BAN);
     }
 
     @Override

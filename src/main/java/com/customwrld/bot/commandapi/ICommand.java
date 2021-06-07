@@ -1,13 +1,11 @@
 package com.customwrld.bot.commandapi;
 
-import net.dv8tion.jda.api.Permission;
-
 import java.util.Collections;
 import java.util.List;
 
 public interface ICommand {
 
-    Permission permission();
+    CommandPermission permission();
 
     String commandName();
 

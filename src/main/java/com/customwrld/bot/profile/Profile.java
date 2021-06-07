@@ -6,8 +6,8 @@ import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
 import lombok.Getter;
 import lombok.Setter;
-import com.customwrld.bot.punishment.Punishment;
-import com.customwrld.bot.punishment.PunishmentType;
+import com.customwrld.bot.profile.punishment.Punishment;
+import com.customwrld.bot.profile.punishment.PunishmentType;
 import org.bson.Document;
 
 import java.util.*;
