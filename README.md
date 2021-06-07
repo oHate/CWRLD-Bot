@@ -1,10 +1,10 @@
 # Bot
 
-This repo contains the code of Bot, the discord bot used by the CUSTOMWRLD Discord Guild.
+Discord application that is written with JDA to provide the CUSTOMWRLD Discord with moderation and utilities.
 
 ## Architecture
 
-This repo contains the following components:
+This repo contains the following components and features:
 
 * Staff Utilitys and Commands
 * Punishments
@@ -12,6 +12,9 @@ This repo contains the following components:
 * Giveaways
 * Tickets
 * Color Formatting
+
+This repo makes use of the following dependencies:
+
 * [MongoDB Module](https://github.com/mongodb/mongo-java-driver)
 * [RabbitMQ Module](https://github.com/rabbitmq/rabbitmq-java-client)
 * [Pigeon](https://github.com/CUSTOMWRLD/Pigeon)
