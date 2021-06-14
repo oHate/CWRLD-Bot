@@ -1,7 +1,7 @@
 package com.customwrld.bot.listeners;
 
 import com.customwrld.bot.Bot;
-import com.customwrld.bot.config.Config;
+import com.customwrld.bot.util.config.Config;
 import com.customwrld.bot.util.Util;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.Message;
@@ -16,12 +16,12 @@ public class MessageListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageUpdate(GuildMessageUpdateEvent event) {
-        Bot bot = Bot.getInstance();
+        Bot bot = Bot.getBot();
         Message message = event.getMessage();
         Member member = event.getMember();
 
         if (member != null) {
-            if (Bot.getInstance().getConfig().getFilteredChannels().contains(event.getChannel().getId())) {
+            if (Bot.getBot().getConfig().getFilteredChannels().contains(event.getChannel().getId())) {
                 if (isLink(message)) {
                     if (!Util.hasStaffRole(member)) {
                         message.delete().queue();
@@ -35,7 +35,7 @@ public class MessageListener extends ListenerAdapter {
 
     @Override
     public void onGuildMessageReceived(GuildMessageReceivedEvent event) {
-        Bot bot = Bot.getInstance();
+        Bot bot = Bot.getBot();
         Message message = event.getMessage();
         User user = event.getAuthor();
         Member member = event.getMember();

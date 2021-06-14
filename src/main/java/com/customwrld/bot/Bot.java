@@ -6,7 +6,7 @@ import com.customwrld.bot.listeners.*;
 import com.customwrld.pigeon.Pigeon;
 import com.google.gson.GsonBuilder;
 import lombok.Setter;
-import com.customwrld.bot.config.Config;
+import com.customwrld.bot.util.config.Config;
 import com.customwrld.bot.timer.TimerManager;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
@@ -20,7 +20,7 @@ import net.dv8tion.jda.api.requests.GatewayIntent;
 
 public class Bot {
 
-    @Getter private static Bot instance;
+    @Getter private static Bot bot;
     @Getter private final long start;
     @Getter private final Pigeon pigeon;
     @Getter private final Config config;
@@ -35,7 +35,7 @@ public class Bot {
     @SneakyThrows
     public Bot() {
         start = System.currentTimeMillis();
-        instance = this;
+        bot = this;
 
         this.pigeon = new Pigeon();
 

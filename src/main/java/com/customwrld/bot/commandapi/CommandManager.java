@@ -63,7 +63,7 @@ public class CommandManager {
 
     public void handle(GuildMessageReceivedEvent event) {
         String[] split = event.getMessage().getContentRaw()
-                .replaceFirst("(?i)" + Pattern.quote(Bot.getInstance().getConfig().getBotPrefix()), "")
+                .replaceFirst("(?i)" + Pattern.quote(Bot.getBot().getConfig().getBotPrefix()), "")
                 .split("\\s+");
 
         Member member = event.getMember();

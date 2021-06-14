@@ -12,15 +12,23 @@ import org.bson.Document;
 
 import java.util.*;
 
+@Getter @Setter
 public class Profile {
 
-    @Getter private static final MongoCollection<Document> collection = Bot.getInstance().getMongoDatabase().getCollection("discordProfiles");
+    public static final MongoCollection<Document> collection = Bot.getBot().getMongoDatabase().getCollection("discord-profiles");
 
-    @Getter @Setter private String discordId;
-    @Getter @Setter private Boolean ticketBanned;
-    @Getter private final List<Punishment> punishments;
-    @Getter @Setter private boolean loaded;
+    private UUID minecraftId;
+    private String discordId;
+    private Boolean ticketBanned;
+    private final List<Punishment> punishments;
+    private boolean loaded;
 
+    public Profile(UUID minecraftId) {
+        this.minecraftId = minecraftId;
+        this.punishments = new ArrayList<>();
+        load();
+    }
+    
     public Profile(String discordId) {
         this.discordId = discordId;
         this.punishments = new ArrayList<>();
@@ -28,7 +36,7 @@ public class Profile {
     }
 
     public Punishment getActivePunishmentByType(PunishmentType type) {
-        for (Punishment punishment : punishments) {
+        for (Punishment punishment : this.punishments) {
             if (punishment.getType() == type && !punishment.isRemoved()) {
                 return punishment;
             }
@@ -39,23 +47,31 @@ public class Profile {
 
     public void save() {
         Document document = new Document();
-        document.put("discordId", discordId);
-        document.put("ticketBanned", ticketBanned);
+        document.put("minecraftId", this.minecraftId);
+        document.put("discordId", this.discordId);
+        document.put("ticketBanned", this.ticketBanned);
 
         List<HashMap<String, String>> simplePunishments = new ArrayList<>();
-        for (Punishment punishment : punishments) {
+        for (Punishment punishment : this.punishments) {
             simplePunishments.add(punishment.simplify());
         }
         document.put("punishments", simplePunishments);
 
-        collection.replaceOne(Filters.eq("discordId", discordId), document, new ReplaceOptions().upsert(true));
+        collection.replaceOne(Filters.eq("discordId", this.discordId), document, new ReplaceOptions().upsert(true));
     }
 
     private void load() {
-        Document document = collection.find(Filters.eq("discordId", discordId)).first();
-
+        Document document = null;
+        
+        if(this.minecraftId == null && this.discordId != null) {
+            document = collection.find(Filters.eq("discordId", this.discordId)).first();
+        } else if(this.discordId == null && this.minecraftId != null) {
+            document = collection.find(Filters.eq("minecraftId", this.minecraftId)).first();
+        }
+        
         if (document != null) {
-            ticketBanned = document.getBoolean("ticketBanned");
+            this.minecraftId = UUID.fromString(document.getString("minecraftId"));
+            this.ticketBanned = document.getBoolean("ticketBanned");
 
             Object obj = document.get("punishments");
             if (obj instanceof List) {
@@ -74,7 +90,7 @@ public class Profile {
                 }
             }
         }
-        loaded = true;
+        this.loaded = true;
     }
 
 }

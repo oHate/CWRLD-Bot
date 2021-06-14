@@ -9,7 +9,7 @@
 //import com.customwrld.bot.util.Duration;
 //import com.customwrld.bot.util.TimeUtil;
 //import com.customwrld.bot.util.Util;
-//import com.customwrld.bot.giveaway.Giveaway;
+//import com.customwrld.bot.util.Giveaway;
 //import com.customwrld.bot.util.enums.EmbedTemplate;
 //import net.dv8tion.jda.api.EmbedBuilder;
 //import net.dv8tion.jda.api.Permission;
@@ -64,7 +64,7 @@
 //                    String prize = String.join(" ", argsCopy);
 //
 //                    guildChannel.sendMessage(new EmbedBuilder()
-//                            .setColor(Bot.getInstance().getConfig().getBotColor())
+//                            .setColor(Bot.getBot().getConfig().getBotColor())
 //                            .setTitle(prize)
 //                            .setDescription("React with :tada: to enter!")
 //                            .addField("Time Remaining", TimeUtil.millisToRoundedTime(duration), false)

@@ -1,4 +1,4 @@
-package com.customwrld.bot.config;
+package com.customwrld.bot.util.config;
 
 import lombok.Getter;
 import net.dv8tion.jda.api.entities.Activity;
@@ -8,29 +8,29 @@ import java.util.List;
 
 public class Config {
 
-    @Getter private String botToken;
-    @Getter private Activity botActivity;
-    @Getter private String botPrefix;
-    @Getter private String botGuild;
-    @Getter private Color botColor;
+    @Getter private final String botToken;
+    @Getter private final Activity botActivity;
+    @Getter private final String botPrefix;
+    @Getter private final String botGuild;
+    @Getter private final Color botColor;
 
-    @Getter private String staffRole;
-    @Getter private String mutedRole;
-    @Getter private List<String> filteredChannels;
+    @Getter private final String staffRole;
+    @Getter private final String mutedRole;
+    @Getter private final List<String> filteredChannels;
 
-    @Getter private String welcomeChannel;
-    @Getter private String memberRole;
+    @Getter private final String welcomeChannel;
+    @Getter private final String memberRole;
 
-    @Getter private String ticketMessage;
-    @Getter private String ticketChannel;
-    @Getter private String ticketCategory;
+    @Getter private final String ticketMessage;
+    @Getter private final String ticketChannel;
+    @Getter private final String ticketCategory;
 
-    @Getter private String mongoHost;
-    @Getter private int mongoPort;
-    @Getter private String mongoDatabase;
-    @Getter private boolean mongoAuthEnabled;
-    @Getter private String mongoUsername;
-    @Getter private String mongoPassword;
+    @Getter private final String mongoHost;
+    @Getter private final int mongoPort;
+    @Getter private final String mongoDatabase;
+    @Getter private final boolean mongoAuthEnabled;
+    @Getter private final String mongoUsername;
+    @Getter private final String mongoPassword;
 
     public Config() {
         ConfigFile file = new ConfigFile();

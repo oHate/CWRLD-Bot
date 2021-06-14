@@ -2,8 +2,8 @@ package com.customwrld.bot.listeners;
 
 import com.customwrld.bot.Bot;
 import com.customwrld.bot.commandapi.CommandManager;
-import com.customwrld.bot.config.Config;
-import com.customwrld.bot.giveaway.Giveaway;
+import com.customwrld.bot.util.config.Config;
+import com.customwrld.bot.util.Giveaway;
 import com.customwrld.bot.pigeon.payloads.AtomStatsRequestPayload;
 import com.customwrld.bot.profile.Profile;
 import com.customwrld.bot.profile.punishment.Punishment;
@@ -19,6 +19,7 @@ import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -33,7 +34,7 @@ public class ReadyListener extends ListenerAdapter {
 
     @Override
     public void onReady(ReadyEvent event) {
-        Bot bot = Bot.getInstance();
+        Bot bot = Bot.getBot();
         Config config = bot.getConfig();
 
         bot.setGuild(event.getJDA().getGuildById(config.getBotGuild()));
@@ -74,7 +75,7 @@ public class ReadyListener extends ListenerAdapter {
                                 List<Server> servers = payload.getServers();
 
                                 EmbedBuilder builder = new EmbedBuilder()
-                                        .setColor(Bot.getInstance().getConfig().getBotColor())
+                                        .setColor(Bot.getBot().getConfig().getBotColor())
                                         .setTitle("Atom Status & Server Information")
                                         .setFooter("Atom Started")
                                         .setTimestamp(new Date(System.currentTimeMillis() - payload.getUptime()).toInstant());
@@ -157,7 +158,8 @@ public class ReadyListener extends ListenerAdapter {
     }
 
     private void initializePunishments(Guild guild, Config config) {
-        FindIterable<Document> documents = Profile.getCollection().find();
+        FindIterable<Document> documents = Profile.collection.find();
+
         for (Document document : documents) {
             Profile profile = new Profile(document.getString("discordId"));
             Punishment banPunishment = profile.getActivePunishmentByType(PunishmentType.BAN);
@@ -184,7 +186,12 @@ public class ReadyListener extends ListenerAdapter {
                     mutePunishment.setRemovedAt(System.currentTimeMillis());
                     mutePunishment.setRemovedBy(null);
                     profile.save();
-                    guild.retrieveMemberById(profile.getDiscordId()).queue(member -> guild.removeRoleFromMember(member, guild.getRoleById(config.getMutedRole())).queue());
+
+                    Role role = guild.getRoleById(config.getMutedRole());
+
+                    if(role != null) {
+                        guild.retrieveMemberById(profile.getDiscordId()).queue(member -> guild.removeRoleFromMember(member, role).queue());
+                    }
                 } else {
                     new MuteTimer(profile, mutePunishment).start();
                 }

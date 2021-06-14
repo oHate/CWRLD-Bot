@@ -1,4 +1,4 @@
-package com.customwrld.bot.config;
+package com.customwrld.bot.util.config;
 
 import io.github.portlek.configs.annotations.Instance;
 import io.github.portlek.configs.annotations.Property;

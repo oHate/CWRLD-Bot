@@ -8,8 +8,8 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.TextChannel;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.Button;
+import net.dv8tion.jda.api.interactions.ActionRow;
+import net.dv8tion.jda.api.interactions.button.Button;
 
 public class DebugCommand implements ICommand {
 
@@ -51,10 +51,10 @@ public class DebugCommand implements ICommand {
     }
 
     public void genSupportTicketMessage(CommandContext ctx) {
-        MessageEmbed header = new EmbedBuilder().setColor(Bot.getInstance().getConfig().getBotColor()).setImage("https://media.discordapp.net/attachments/789175632340713523/827264383121883136/Customwrld.png").build();
+        MessageEmbed header = new EmbedBuilder().setColor(Bot.getBot().getConfig().getBotColor()).setImage("https://media.discordapp.net/attachments/789175632340713523/827264383121883136/Customwrld.png").build();
 
         MessageEmbed body = new EmbedBuilder()
-                .setColor(Bot.getInstance().getConfig().getBotColor())
+                .setColor(Bot.getBot().getConfig().getBotColor())
                 .setTitle(":tickets:  **CREATE A SUPPORT TICKET**                                                  ** **")
                 .setDescription("""
                         Having any issues with the Discord or Server? Staff will get to you as

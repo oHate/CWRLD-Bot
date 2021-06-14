@@ -14,7 +14,7 @@ import java.util.Map;
 public class Ticket {
 
     @Getter private static final Map<String, Ticket> activeTickets = new HashMap<>();
-    @Getter private static final MongoCollection<Document> collection = Bot.getInstance().getMongoDatabase().getCollection("tickets");
+    @Getter private static final MongoCollection<Document> collection = Bot.getBot().getMongoDatabase().getCollection("tickets");
 
     @Getter String discordId;
     @Getter @Setter String channelId;
@@ -25,14 +25,14 @@ public class Ticket {
     }
 
     public boolean isValid() {
-        return Bot.getInstance().getGuild().getTextChannelById(this.channelId) != null;
+        return Bot.getBot().getGuild().getTextChannelById(this.channelId) != null;
     }
 
     public static boolean canCreateTicket(String discordId) {
         Document document = collection.find(new Document("discordId", discordId)).first();
 
         if(document != null) {
-            if(Bot.getInstance().getGuild().getTextChannelById(document.getString("channelId")) == null) {
+            if(Bot.getBot().getGuild().getTextChannelById(document.getString("channelId")) == null) {
                 collection.deleteOne(document);
                 Ticket.getActiveTickets().remove(discordId);
                 return true;

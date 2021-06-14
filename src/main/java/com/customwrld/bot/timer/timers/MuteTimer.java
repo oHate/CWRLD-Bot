@@ -1,7 +1,7 @@
 package com.customwrld.bot.timer.timers;
 
 import com.customwrld.bot.Bot;
-import com.customwrld.bot.config.Config;
+import com.customwrld.bot.util.config.Config;
 import com.customwrld.bot.timer.api.Timer;
 import com.customwrld.bot.timer.api.TimerType;
 import com.customwrld.bot.profile.Profile;
@@ -20,7 +20,7 @@ public class MuteTimer extends Timer {
     private Config config;
 
     public MuteTimer(Profile profile, Punishment punishment) {
-        super(TimerType.COUNTDOWN, Bot.getInstance().getTimerManager());
+        super(TimerType.COUNTDOWN, Bot.getBot().getTimerManager());
         setDuration(punishment.getMillisRemaining());
         this.profile = profile;
         this.punishment = punishment;
@@ -31,7 +31,7 @@ public class MuteTimer extends Timer {
 
     @Override
     public void onStart() {
-        Bot bot = Bot.getInstance();
+        Bot bot = Bot.getBot();
         this.guild = bot.getGuild();
         this.config = bot.getConfig();
     }

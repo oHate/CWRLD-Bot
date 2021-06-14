@@ -45,7 +45,7 @@
 //        JDA jda = ctx.getJDA();
 //        Guild guild = ctx.getGuild();
 //        TextChannel channel = ctx.getChannel();
-//        Role role = guild.getRoleById(Bot.getInstance() .getConfig().getMutedRole());
+//        Role role = guild.getRoleById(Bot.getBot() .getConfig().getMutedRole());
 //        User author = ctx.getAuthor();
 //        String userId = Util.getId(args.get(0));
 //

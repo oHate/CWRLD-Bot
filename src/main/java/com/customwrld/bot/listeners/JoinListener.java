@@ -14,7 +14,7 @@ public class JoinListener extends ListenerAdapter {
 
     @Override
     public void onGuildMemberJoin(GuildMemberJoinEvent event) {
-        Bot bot = Bot.getInstance();
+        Bot bot = Bot.getBot();
         User user = event.getUser();
         TextChannel channel = bot.getGuild().getTextChannelById(bot.getConfig().getWelcomeChannel());
 
@@ -30,7 +30,7 @@ public class JoinListener extends ListenerAdapter {
     @Override
     public void onGuildJoin(GuildJoinEvent event) {
         Guild guild = event.getGuild();
-        if (guild.equals(Bot.getInstance().getGuild())) {
+        if (guild.equals(Bot.getBot().getGuild())) {
             guild.leave().queue();
         }
     }

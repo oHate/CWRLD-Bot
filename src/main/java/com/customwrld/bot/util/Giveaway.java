@@ -1,7 +1,7 @@
-package com.customwrld.bot.giveaway;
+package com.customwrld.bot.util;
 
 import com.customwrld.bot.Bot;
-import com.customwrld.bot.config.Config;
+import com.customwrld.bot.util.config.Config;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.ReplaceOptions;
@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 
 public class Giveaway {
 
-    @Getter private static MongoCollection<Document> collection = Bot.getInstance().getMongoDatabase().getCollection("giveaways");
+    @Getter private static MongoCollection<Document> collection = Bot.getBot().getMongoDatabase().getCollection("giveaways");
 
     @Getter @Setter Long ends;
     @Getter @Setter String channelId;
@@ -61,7 +61,7 @@ public class Giveaway {
     }
 
     public void validate(Consumer<Boolean> consumer) {
-        TextChannel channel = Bot.getInstance().getGuild().getTextChannelById(this.channelId);
+        TextChannel channel = Bot.getBot().getGuild().getTextChannelById(this.channelId);
         if(channel != null) {
             channel.retrieveMessageById(messageId).queue((message) -> {
                     if(!hasEnded() && !finished) {
@@ -92,7 +92,7 @@ public class Giveaway {
     }
 
     public void drawWinner(Message message) {
-        Config config = Bot.getInstance().getConfig();
+        Config config = Bot.getBot().getConfig();
 
         message.getReactions()
                 .stream().filter(r -> r.getReactionEmote().getName().equals("\uD83C\uDF89"))

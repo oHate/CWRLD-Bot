@@ -41,7 +41,7 @@ public class Util {
 
     public static boolean hasStaffRole(Member member) {
         Role hasRole = member.getRoles().stream()
-                .filter(role -> role.getId().equals(Bot.getInstance().getConfig().getStaffRole()))
+                .filter(role -> role.getId().equals(Bot.getBot().getConfig().getStaffRole()))
                 .findFirst()
                 .orElse(null);
 
@@ -54,7 +54,7 @@ public class Util {
 
     public static EmbedBuilder builder(User user) {
         return new EmbedBuilder()
-                .setColor(Bot.getInstance().getConfig().getBotColor())
+                .setColor(Bot.getBot().getConfig().getBotColor())
                 .setFooter(user.getAsTag(), user.getAvatarUrl())
                 .setTimestamp(OffsetDateTime.now());
     }

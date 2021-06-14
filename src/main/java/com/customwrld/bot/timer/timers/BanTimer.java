@@ -17,7 +17,7 @@ public class BanTimer extends Timer {
     private Guild guild;
 
     public BanTimer(Profile profile, Punishment punishment) {
-        super(TimerType.COUNTDOWN, Bot.getInstance().getTimerManager());
+        super(TimerType.COUNTDOWN, Bot.getBot().getTimerManager());
         setDuration(punishment.getMillisRemaining());
         this.profile = profile;
         this.punishment = punishment;
@@ -28,7 +28,7 @@ public class BanTimer extends Timer {
 
     @Override
     public void onStart() {
-        Bot bot = Bot.getInstance();
+        Bot bot = Bot.getBot();
         this.guild = bot.getGuild();
     }
 

@@ -1,7 +1,7 @@
 package com.customwrld.bot.commandapi.button;
 
 import com.customwrld.bot.Bot;
-import com.customwrld.bot.config.Config;
+import com.customwrld.bot.util.config.Config;
 import com.customwrld.bot.profile.tickets.Ticket;
 import com.customwrld.bot.util.Util;
 import com.customwrld.bot.util.enums.EmbedTemplate;
@@ -9,9 +9,9 @@ import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.ButtonClickEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
-import net.dv8tion.jda.api.interactions.components.ActionRow;
-import net.dv8tion.jda.api.interactions.components.Button;
-import net.dv8tion.jda.api.interactions.components.Component;
+import net.dv8tion.jda.api.interactions.ActionRow;
+import net.dv8tion.jda.api.interactions.Component;
+import net.dv8tion.jda.api.interactions.button.Button;
 
 import java.util.*;
 
@@ -82,7 +82,7 @@ public class ButtonHandler extends ListenerAdapter {
     }
 
     private void createTicket(ButtonClickEvent event) {
-        Bot bot = Bot.getInstance();
+        Bot bot = Bot.getBot();
         Config config = bot.getConfig();
         Guild guild = event.getGuild();
         Member member = event.getMember();
