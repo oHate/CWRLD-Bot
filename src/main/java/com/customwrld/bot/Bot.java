@@ -3,67 +3,72 @@ package com.customwrld.bot;
 import com.customwrld.bot.commandapi.button.ButtonHandler;
 import com.customwrld.bot.commandapi.CommandManager;
 import com.customwrld.bot.listeners.*;
+import com.customwrld.bot.pigeon.Listeners;
+import com.customwrld.commonlib.CommonLib;
 import com.customwrld.pigeon.Pigeon;
 import com.google.gson.GsonBuilder;
 import lombok.Setter;
 import com.customwrld.bot.util.config.Config;
-import com.customwrld.bot.timer.TimerManager;
+import com.customwrld.bot.util.timer.TimerManager;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import lombok.Getter;
-import lombok.SneakyThrows;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 
+import javax.security.auth.login.LoginException;
+
+@Getter @Setter
 public class Bot {
 
-    @Getter private static Bot bot;
-    @Getter private final long start;
-    @Getter private final Pigeon pigeon;
-    @Getter private final Config config;
-    @Getter private final JDA jda;
-    @Getter private final Gson GSON;
-    @Getter @Setter private CommandManager commandManager;
-    @Getter @Setter private Guild guild;
-    @Getter @Setter private MongoClient mongoClient;
-    @Getter @Setter private MongoDatabase mongoDatabase;
-    @Getter @Setter private TimerManager timerManager;
+//    public class RoleComparator implements Comparator<Role> {
+//
+//        public int compare(Role role1, Role role2) {
+//            return role2.getPosition() - role1.getPosition();
+//        }
+//
+//    }
 
-    @SneakyThrows
+    @Getter private static Bot bot;
+    private final long start;
+    private Pigeon pigeon;
+    private CommonLib commonLib;
+    private final Config config;
+    private final JDA jda;
+    private final Gson GSON;
+    private CommandManager commandManager;
+    private Guild guild;
+    private MongoClient mongoClient;
+    private MongoDatabase mongoDatabase;
+    private TimerManager timerManager;
+
     public Bot() {
         start = System.currentTimeMillis();
         bot = this;
 
-        this.pigeon = new Pigeon();
+        this.config = new Config();
 
-        this.pigeon.initialize("127.0.0.1", 5672, "customwrld", "discord");
+        this.GSON = new GsonBuilder().setPrettyPrinting().create();
 
-        this.pigeon.getConvertersRegistry()
-                .registerConvertersInPackage("com.customwrld.bot.pigeon.converters");
+        this.timerManager = new TimerManager();
 
-        this.pigeon.getPayloadsRegistry()
-                .registerPayloadsInPackage("com.customwrld.bot.pigeon.payloads");
+        JDA jda = null;
 
-        this.pigeon.getListenersRegistry().registerListener(new PigeonListener());
+        try {
+            jda = JDABuilder.createDefault(config.getBotToken())
+                    .setActivity(config.getBotActivity())
+                    .enableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
+                    .addEventListeners(new JoinListener(), new MessageListener(), new ReadyListener(), new ButtonHandler())
+                    .build();
+        } catch (LoginException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
 
-        this.pigeon.setupDefaultUpdater();
-
-        this.pigeon.acceptDelivery();
-
-        config = new Config();
-
-        GSON = new GsonBuilder().setPrettyPrinting().create();
-
-        timerManager = new TimerManager();
-
-        jda = JDABuilder.createDefault(config.getBotToken())
-                .setActivity(config.getBotActivity())
-                .enableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
-                .addEventListeners(new JoinListener(), new MessageListener(), new ReadyListener(), new ButtonHandler())
-                .build();
+        this.jda = jda;
     }
 
 

@@ -1,4 +1,4 @@
-package com.customwrld.bot.timer.api;
+package com.customwrld.bot.util.timer.api;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

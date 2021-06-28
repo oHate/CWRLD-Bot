@@ -2,24 +2,22 @@ package com.customwrld.bot.listeners;
 
 import com.customwrld.bot.Bot;
 import com.customwrld.bot.commandapi.CommandManager;
+import com.customwrld.bot.modules.Server;
+import com.customwrld.bot.pigeon.Listeners;
 import com.customwrld.bot.util.config.Config;
 import com.customwrld.bot.util.Giveaway;
 import com.customwrld.bot.pigeon.payloads.AtomStatsRequestPayload;
-import com.customwrld.bot.profile.Profile;
-import com.customwrld.bot.profile.punishment.Punishment;
-import com.customwrld.bot.profile.punishment.PunishmentType;
-import com.customwrld.bot.profile.tickets.Ticket;
-import com.customwrld.bot.timer.timers.BanTimer;
-import com.customwrld.bot.timer.timers.GiveawayTimer;
-import com.customwrld.bot.timer.timers.MuteTimer;
+import com.customwrld.bot.modules.Ticket;
+import com.customwrld.bot.util.timer.timers.GiveawayTimer;
 import com.customwrld.bot.util.*;
+import com.customwrld.commonlib.CommonLib;
+import com.customwrld.pigeon.Pigeon;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
 import com.sun.management.OperatingSystemMXBean;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.MessageEmbed;
-import net.dv8tion.jda.api.entities.Role;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.dv8tion.jda.api.events.ReadyEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -53,14 +51,18 @@ public class ReadyListener extends ListenerAdapter {
         loadMongo(bot, config);
         Logger.log(Logger.LogType.INFO, "MongoDB has been loaded and activated!");
 
-        initializeTickets();
+        loadPigeon(bot);
+
+        bot.setCommonLib(new CommonLib(bot.getMongoClient(), bot.getMongoDatabase(), bot.getPigeon()));
+        Logger.log(Logger.LogType.INFO, "CommonLib has been loaded and activated!");
+
+        bot.getPigeon().acceptDelivery();
+
+        loadTickets();
         Logger.log(Logger.LogType.INFO, "Support Tickets have been loaded and activated!");
 
-        initializeGiveaways(bot.getGuild());
+        loadGiveaways(bot.getGuild());
         Logger.log(Logger.LogType.INFO, "Giveaways have been loaded and activated!");
-
-        initializePunishments(bot.getGuild(), config);
-        Logger.log(Logger.LogType.INFO, "Punishments have been loaded and activated!");
 
         Logger.log(Logger.LogType.READY, event.getJDA().getSelfUser().getAsTag() + " started in " + (System.currentTimeMillis() - bot.getStart()) + "ms.");
 
@@ -129,7 +131,26 @@ public class ReadyListener extends ListenerAdapter {
         bot.setMongoDatabase(bot.getMongoClient().getDatabase(config.getMongoDatabase()));
     }
 
-    private void initializeTickets() {
+    private void loadPigeon(Bot bot) {
+        bot.setPigeon(new Pigeon());
+
+        Pigeon pigeon = bot.getPigeon();
+
+        pigeon.initialize("127.0.0.1", 5672, "customwrld", "discord");
+
+        pigeon.getConvertersRegistry()
+                .registerConvertersInPackage("com.customwrld.bot.pigeon.converters");
+
+        pigeon.getPayloadsRegistry()
+                .registerPayloadsInPackage("com.customwrld.bot.pigeon.payloads");
+
+        pigeon.getListenersRegistry()
+                .registerListener(new Listeners());
+
+        pigeon.setupDefaultUpdater();
+    }
+
+    private void loadTickets() {
         FindIterable<Document> documents = Ticket.getCollection().find();
 
         for (Document document : documents) {
@@ -142,7 +163,7 @@ public class ReadyListener extends ListenerAdapter {
         }
     }
 
-    private void initializeGiveaways(Guild guild) {
+    private void loadGiveaways(Guild guild) {
         FindIterable<Document> documents = Giveaway.getCollection().find();
         for (Document document : documents) {
             Giveaway giveaway = new Giveaway(document.getLong("ends"), document.getString("channelId"), document.getString("messageId"), document.getString("prize"));
@@ -154,48 +175,6 @@ public class ReadyListener extends ListenerAdapter {
                     guild.getTextChannelById(giveaway.getChannelId()).retrieveMessageById(giveaway.getMessageId()).queue(message -> new GiveawayTimer(giveaway).start());
                 }
             });
-        }
-    }
-
-    private void initializePunishments(Guild guild, Config config) {
-        FindIterable<Document> documents = Profile.collection.find();
-
-        for (Document document : documents) {
-            Profile profile = new Profile(document.getString("discordId"));
-            Punishment banPunishment = profile.getActivePunishmentByType(PunishmentType.BAN);
-
-            if (banPunishment != null && !banPunishment.isPermanent()) {
-                if (banPunishment.hasExpired() && !banPunishment.isRemoved()) {
-                    banPunishment.setRemoved(true);
-                    banPunishment.setRemovedReason("Punishment Expired");
-                    banPunishment.setRemovedAt(System.currentTimeMillis());
-                    banPunishment.setRemovedBy(null);
-                    profile.save();
-                    guild.retrieveMemberById(profile.getDiscordId()).queue(member -> guild.unban("Punishment Expired").queue());
-                } else {
-                    new BanTimer(profile, banPunishment).start();
-                }
-            }
-
-            Punishment mutePunishment = profile.getActivePunishmentByType(PunishmentType.MUTE);
-
-            if (mutePunishment != null && !mutePunishment.isPermanent()) {
-                if (mutePunishment.hasExpired() && !mutePunishment.isRemoved()) {
-                    mutePunishment.setRemoved(true);
-                    mutePunishment.setRemovedReason("Punishment Expired");
-                    mutePunishment.setRemovedAt(System.currentTimeMillis());
-                    mutePunishment.setRemovedBy(null);
-                    profile.save();
-
-                    Role role = guild.getRoleById(config.getMutedRole());
-
-                    if(role != null) {
-                        guild.retrieveMemberById(profile.getDiscordId()).queue(member -> guild.removeRoleFromMember(member, role).queue());
-                    }
-                } else {
-                    new MuteTimer(profile, mutePunishment).start();
-                }
-            }
         }
     }
 

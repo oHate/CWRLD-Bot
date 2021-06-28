@@ -1,6 +1,6 @@
-package com.customwrld.bot.timer.api;
+package com.customwrld.bot.util.timer.api;
 
-import com.customwrld.bot.timer.TimerManager;
+import com.customwrld.bot.util.timer.TimerManager;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;

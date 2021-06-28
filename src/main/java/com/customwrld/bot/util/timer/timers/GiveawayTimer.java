@@ -1,9 +1,9 @@
-package com.customwrld.bot.timer.timers;
+package com.customwrld.bot.util.timer.timers;
 
 import com.customwrld.bot.Bot;
 import com.customwrld.bot.util.config.Config;
-import com.customwrld.bot.timer.api.Timer;
-import com.customwrld.bot.timer.api.TimerType;
+import com.customwrld.bot.util.timer.api.Timer;
+import com.customwrld.bot.util.timer.api.TimerType;
 import com.customwrld.bot.util.Giveaway;
 import com.customwrld.bot.util.Logger;
 import com.customwrld.bot.util.TimeUtil;

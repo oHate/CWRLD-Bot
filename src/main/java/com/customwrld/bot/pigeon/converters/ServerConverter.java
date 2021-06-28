@@ -1,6 +1,6 @@
 package com.customwrld.bot.pigeon.converters;
 
-import com.customwrld.bot.util.Server;
+import com.customwrld.bot.modules.Server;
 import com.customwrld.pigeon.Converter;
 import com.customwrld.pigeon.converters.ListConverter;
 import com.google.gson.JsonElement;

@@ -6,7 +6,7 @@
 //import com.customwrld.bot.profile.Profile;
 //import com.customwrld.bot.profile.punishment.Punishment;
 //import com.customwrld.bot.profile.punishment.PunishmentType;
-//import com.customwrld.bot.timer.timers.BanTimer;
+//import com.customwrld.bot.util.timer.timers.BanTimer;
 //import com.customwrld.bot.util.Duration;
 //import com.customwrld.bot.util.Util;
 //import com.customwrld.bot.util.enums.EmbedTemplate;

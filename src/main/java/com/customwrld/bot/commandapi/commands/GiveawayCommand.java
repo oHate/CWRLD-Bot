@@ -4,7 +4,7 @@
 //import com.customwrld.bot.commandapi.CommandContext;
 //import com.customwrld.bot.commandapi.CommandPermission;
 //import com.customwrld.bot.commandapi.ICommand;
-//import com.customwrld.bot.timer.timers.GiveawayTimer;
+//import com.customwrld.bot.util.timer.timers.GiveawayTimer;
 //import com.customwrld.bot.util.Argument;
 //import com.customwrld.bot.util.Duration;
 //import com.customwrld.bot.util.TimeUtil;

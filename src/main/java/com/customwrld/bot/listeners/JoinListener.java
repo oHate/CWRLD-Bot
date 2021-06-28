@@ -23,6 +23,7 @@ public class JoinListener extends ListenerAdapter {
                 .setThumbnail(user.getAvatarUrl())
                 .setTitle("**Welcome to the CUSTOMWRLD Discord**")
                 .setDescription(":video_game: ・ **Server IP:** CUSTOMWRLD.COM\n:gem: ・ **Store Link:** https://store.customwrld.com/\n:bird: ・ **Twitter:** https://www.twitter.com/customwrldcom\n:link: ・ **Discord Invite:** https://discord.gg/QYMmkdXBjf");
+
         channel.sendMessage("> <@" + user.getId() + ">").queue();
         channel.sendMessage(builder.build()).queue();
     }

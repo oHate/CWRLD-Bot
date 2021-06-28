@@ -2,7 +2,7 @@ package com.customwrld.bot.commandapi.button;
 
 import com.customwrld.bot.Bot;
 import com.customwrld.bot.util.config.Config;
-import com.customwrld.bot.profile.tickets.Ticket;
+import com.customwrld.bot.modules.Ticket;
 import com.customwrld.bot.util.Util;
 import com.customwrld.bot.util.enums.EmbedTemplate;
 import net.dv8tion.jda.api.Permission;

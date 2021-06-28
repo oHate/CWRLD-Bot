@@ -1,8 +1,8 @@
-package com.customwrld.bot.listeners;
+package com.customwrld.bot.pigeon;
 
 import com.customwrld.pigeon.annotations.PayloadListener;
 import com.customwrld.pigeon.listeners.Listener;
 
 @PayloadListener
-public class PigeonListener implements Listener {
+public class Listeners implements Listener {
 }

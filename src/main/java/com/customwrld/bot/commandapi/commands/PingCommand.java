@@ -32,7 +32,7 @@ public class PingCommand implements ICommand {
                         ctx.getChannel(),
                         ctx.getAuthor(),
                         "**Bot Latency**",
-                        ":hourglass_flowing_sand: ｜ **Rest Ping:** " + ping + "ms \n:desktop: ｜ **Gateway Ping:** " + jda.getGatewayPing() + "ms \n:signal_strength: ｜ **Atom Response Time:** 1ms"
+                        ":hourglass_flowing_sand: ｜ **Rest Ping:** " + ping + "ms \n:desktop: ｜ **Gateway Ping:** " + jda.getGatewayPing() + "ms \n:signal_strength: ｜ **Atom Response Time:** N/Ams"
                 )
         );
     }

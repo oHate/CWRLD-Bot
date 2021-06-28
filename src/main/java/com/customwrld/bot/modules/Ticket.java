@@ -1,4 +1,4 @@
-package com.customwrld.bot.profile.tickets;
+package com.customwrld.bot.modules;
 
 import com.customwrld.bot.Bot;
 import com.mongodb.client.MongoCollection;

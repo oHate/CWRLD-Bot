@@ -1,4 +1,4 @@
-package com.customwrld.bot.util;
+package com.customwrld.bot.modules;
 
 import java.util.List;
 
