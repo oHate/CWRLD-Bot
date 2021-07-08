@@ -1,12 +1,12 @@
-package com.customwrld.bot.util.timer.timers;
+package com.customwrld.bot.timers;
 
 import com.customwrld.bot.Bot;
 import com.customwrld.bot.util.config.Config;
-import com.customwrld.bot.util.timer.api.Timer;
-import com.customwrld.bot.util.timer.api.TimerType;
 import com.customwrld.bot.util.Giveaway;
 import com.customwrld.bot.util.Logger;
-import com.customwrld.bot.util.TimeUtil;
+import com.customwrld.commonlib.CommonLib;
+import com.customwrld.commonlib.util.TimeUtil;
+import com.customwrld.commonlib.util.timer.Timer;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.TextChannel;
@@ -20,7 +20,7 @@ public class GiveawayTimer extends Timer {
     private Guild guild;
 
     public GiveawayTimer(Giveaway giveaway) {
-        super(TimerType.COUNTDOWN, Bot.getBot().getTimerManager());
+        super(TimerType.COUNTDOWN, CommonLib.getCommonLib().getTimerManager());
         setDuration(giveaway.getEnds() - System.currentTimeMillis());
         this.giveaway = giveaway;
     }

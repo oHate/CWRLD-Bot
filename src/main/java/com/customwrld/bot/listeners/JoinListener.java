@@ -1,6 +1,7 @@
 package com.customwrld.bot.listeners;
 
 import com.customwrld.bot.Bot;
+import com.customwrld.bot.util.Logger;
 import com.customwrld.bot.util.Util;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Guild;
@@ -17,6 +18,11 @@ public class JoinListener extends ListenerAdapter {
         Bot bot = Bot.getBot();
         User user = event.getUser();
         TextChannel channel = bot.getGuild().getTextChannelById(bot.getConfig().getWelcomeChannel());
+
+        if(channel == null) {
+            Logger.log(Logger.LogType.ERROR, "Welcome Channel was marked as NULL.");
+            return;
+        }
 
         EmbedBuilder builder = Util.builder(event.getUser())
                 .setAuthor(user.getAsTag(), null, user.getAvatarUrl())

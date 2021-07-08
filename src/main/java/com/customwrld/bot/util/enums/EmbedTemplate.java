@@ -16,7 +16,7 @@ public enum EmbedTemplate {
     WRONG_USAGE("**Invalid Command Usage**", "Correct Usage: " + Bot.getBot().getConfig().getBotPrefix() + "{0}"),
     PERMISSION_EXCEPTION("**Permission Exception**", "You do not have permission to use this command."),
     TICKET_EXCEPTION("**Ticket Exception**", "You cannot create a new ticket."),
-    TICKET_CREATED("**Ticket Created**", "You have successfully created a new ticket!\n\n__[Click Here to visit your Ticket!](https://canary.discord.com/channels/{0}/{1}/{2})__"),
+    TICKET_CREATED("**Ticket Created**", "You have successfully created a new ticket!\n\n__[Click Here to visit your Ticket!](https://discord.com/channels/{0}/{1}/{2})__"),
     BUTTON_EXCEPTION("**Permission Exception**", "You do not have permission to use this button."),
     BUTTON_EXPIRED("**Expired Button**", "The button you have triggered has expired."),
     USER_EXCEPTION("**User Exception**", "The provided user does not exist."),

@@ -6,11 +6,12 @@ import com.customwrld.bot.modules.Server;
 import com.customwrld.bot.pigeon.Listeners;
 import com.customwrld.bot.util.config.Config;
 import com.customwrld.bot.util.Giveaway;
-import com.customwrld.bot.pigeon.payloads.AtomStatsRequestPayload;
 import com.customwrld.bot.modules.Ticket;
-import com.customwrld.bot.util.timer.timers.GiveawayTimer;
+import com.customwrld.bot.timers.GiveawayTimer;
 import com.customwrld.bot.util.*;
 import com.customwrld.commonlib.CommonLib;
+import com.customwrld.commonlib.modules.pigeon.payloads.atom.AtomStatsRequestPayload;
+import com.customwrld.commonlib.util.TimeUtil;
 import com.customwrld.pigeon.Pigeon;
 import com.mongodb.MongoClient;
 import com.mongodb.client.FindIterable;
@@ -66,64 +67,64 @@ public class ReadyListener extends ListenerAdapter {
 
         Logger.log(Logger.LogType.READY, event.getJDA().getSelfUser().getAsTag() + " started in " + (System.currentTimeMillis() - bot.getStart()) + "ms.");
 
-        new Thread(() -> {
-            while (true) {
-                try {
-                    TextChannel channel = bot.getGuild().getTextChannelById("847189427167166464");
-
-                    if (channel != null) {
-                        channel.retrieveMessageById("850893270497886208").queue(message -> {
-                            bot.getPigeon().broadcast(new AtomStatsRequestPayload((payload) -> {
-                                List<Server> servers = payload.getServers();
-
-                                EmbedBuilder builder = new EmbedBuilder()
-                                        .setColor(Bot.getBot().getConfig().getBotColor())
-                                        .setTitle("Atom Status & Server Information")
-                                        .setFooter("Atom Started")
-                                        .setTimestamp(new Date(System.currentTimeMillis() - payload.getUptime()).toInstant());
-
-                                int players = 0;
-
-                                for (Server server : servers) {
-                                    players += server.getPlayers().size();
-
-                                    builder.addField(
-                                            new MessageEmbed.Field(
-                                                    "__**Server: " + server.getName() + "**__",
-                                                    "```┌─────────────────\n" +
-                                                            "│ Players: " + server.getPlayers().size() + "\n" +
-                                                            "│ TPS: " + server.getTps() + "\n" +
-                                                            "│ Time: " + TimeUtil.millisToRoundedTime(server.getUptime()) + "\n" +
-                                                            "│ Type: " + server.getType() + "\n" +
-                                                            "└─────────────────```",
-                                                    true)
-                                    );
-
-                                    for (int i = 0; i < (3 - (servers.size() % 3)) % 3; i++) {
-                                        builder.addField(new MessageEmbed.Field("__**Server: None**__", "```┌─────────────────\n│\n│\n│\n│\n└─────────────────```", true));
-                                    }
-                                }
-
-                                builder.setDescription("```" + Table.of(new String[][]{
-                                        new String[]{"Response Time", System.currentTimeMillis() - payload.getLatency() + "ms"}, // TODO: CACHE RESPONSE TIME SO IT CAN BE USED IN PING COMMAND
-                                        new String[]{"Online Players", players + "/1000"},
-                                        new String[]{"Uptime", TimeUtil.millisToRoundedTime(payload.getUptime())},
-                                        new String[]{"CPU Usage", new DecimalFormat("#0.00").format(payload.getUsedCpu() * 100) + "% of 100%"}, // TODO: DEBUG CPU IT SOMETIMES DISPLAYS 0
-                                        new String[]{"RAM Usage", Util.readableBytes(payload.getUsedMemory()) + " of " + Util.readableBytes(ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class).getTotalMemorySize())},
-                                }) + "```");
-
-                                message.editMessage(builder.build()).queue();
-                            }));
-
-                        });
-                    }
-
-                    Thread.sleep(30000);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
+//        new Thread(() -> {
+//            while (true) {
+//                try {
+//                    TextChannel channel = bot.getGuild().getTextChannelById("847189427167166464");
+//
+//                    if (channel != null) {
+//                        channel.retrieveMessageById("850893270497886208").queue(message -> {
+//                            bot.getPigeon().broadcast(new AtomStatsRequestPayload((payload) -> {
+//                                List<Server> servers = payload.getServers();
+//
+//                                EmbedBuilder builder = new EmbedBuilder()
+//                                        .setColor(Bot.getBot().getConfig().getBotColor())
+//                                        .setTitle("Atom Status & Server Information")
+//                                        .setFooter("Atom Started")
+//                                        .setTimestamp(new Date(System.currentTimeMillis() - payload.getUptime()).toInstant());
+//
+//                                int players = 0;
+//
+//                                for (Server server : servers) {
+//                                    players += server.getPlayers().size();
+//
+//                                    builder.addField(
+//                                            new MessageEmbed.Field(
+//                                                    "__**Server: " + server.getName() + "**__",
+//                                                    "```┌─────────────────\n" +
+//                                                            "│ Players: " + server.getPlayers().size() + "\n" +
+//                                                            "│ TPS: " + server.getTps() + "\n" +
+//                                                            "│ Time: " + TimeUtil.millisToRoundedTime(server.getUptime()) + "\n" +
+//                                                            "│ Type: " + server.getType() + "\n" +
+//                                                            "└─────────────────```",
+//                                                    true)
+//                                    );
+//
+//                                    for (int i = 0; i < (3 - (servers.size() % 3)) % 3; i++) {
+//                                        builder.addField(new MessageEmbed.Field("__**Server: None**__", "```┌─────────────────\n│\n│\n│\n│\n└─────────────────```", true));
+//                                    }
+//                                }
+//
+//                                builder.setDescription("```" + Table.of(new String[][]{
+//                                        new String[]{"Response Time", System.currentTimeMillis() - payload.getLatency() + "ms"}, // TODO: CACHE RESPONSE TIME SO IT CAN BE USED IN PING COMMAND
+//                                        new String[]{"Online Players", players + "/1000"},
+//                                        new String[]{"Uptime", TimeUtil.millisToRoundedTime(payload.getUptime())},
+//                                        new String[]{"CPU Usage", new DecimalFormat("#0.00").format(payload.getUsedCpu() * 100) + "% of 100%"}, // TODO: DEBUG CPU IT SOMETIMES DISPLAYS 0
+//                                        new String[]{"RAM Usage", Util.readableBytes(payload.getUsedMemory()) + " of " + Util.readableBytes(ManagementFactory.getPlatformMXBean(OperatingSystemMXBean.class).getTotalMemorySize())},
+//                                }) + "```");
+//
+//                                message.editMessage(builder.build()).queue();
+//                            }));
+//
+//                        });
+//                    }
+//
+//                    Thread.sleep(30000);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }).start();
     }
 
     private void loadMongo(Bot bot, Config config) {
@@ -137,12 +138,6 @@ public class ReadyListener extends ListenerAdapter {
         Pigeon pigeon = bot.getPigeon();
 
         pigeon.initialize("127.0.0.1", 5672, "customwrld", "discord");
-
-        pigeon.getConvertersRegistry()
-                .registerConvertersInPackage("com.customwrld.bot.pigeon.converters");
-
-        pigeon.getPayloadsRegistry()
-                .registerPayloadsInPackage("com.customwrld.bot.pigeon.payloads");
 
         pigeon.getListenersRegistry()
                 .registerListener(new Listeners());

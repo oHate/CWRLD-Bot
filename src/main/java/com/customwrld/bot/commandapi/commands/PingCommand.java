@@ -9,11 +9,6 @@ import net.dv8tion.jda.api.JDA;
 public class PingCommand implements ICommand {
 
     @Override
-    public CommandPermission permission() {
-        return null;
-    }
-
-    @Override
     public String commandName() {
         return "ping";
     }

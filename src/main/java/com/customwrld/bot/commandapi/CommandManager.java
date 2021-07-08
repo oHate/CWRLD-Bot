@@ -71,16 +71,6 @@ public class CommandManager {
         ICommand cmd = this.getCommand(invoke);
 
         if (cmd != null && member != null) {
-            TextChannel channel = event.getChannel();
-
-            CommandPermission permission = cmd.permission();
-
-            if(permission != null) {
-                if(!permission.handlePermission(member, channel)) {
-                    return;
-                }
-            }
-
             String[] args = Arrays.copyOfRange(split, 1, split.length);
 
             CommandContext ctx = new CommandContext(event, args);

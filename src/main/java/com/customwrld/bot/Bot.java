@@ -3,13 +3,11 @@ package com.customwrld.bot;
 import com.customwrld.bot.commandapi.button.ButtonHandler;
 import com.customwrld.bot.commandapi.CommandManager;
 import com.customwrld.bot.listeners.*;
-import com.customwrld.bot.pigeon.Listeners;
 import com.customwrld.commonlib.CommonLib;
 import com.customwrld.pigeon.Pigeon;
 import com.google.gson.GsonBuilder;
 import lombok.Setter;
 import com.customwrld.bot.util.config.Config;
-import com.customwrld.bot.util.timer.TimerManager;
 import com.google.gson.Gson;
 import com.mongodb.MongoClient;
 import com.mongodb.client.MongoDatabase;
@@ -43,7 +41,6 @@ public class Bot {
     private Guild guild;
     private MongoClient mongoClient;
     private MongoDatabase mongoDatabase;
-    private TimerManager timerManager;
 
     public Bot() {
         start = System.currentTimeMillis();
@@ -53,15 +50,13 @@ public class Bot {
 
         this.GSON = new GsonBuilder().setPrettyPrinting().create();
 
-        this.timerManager = new TimerManager();
-
         JDA jda = null;
 
         try {
             jda = JDABuilder.createDefault(config.getBotToken())
                     .setActivity(config.getBotActivity())
                     .enableIntents(GatewayIntent.GUILD_PRESENCES, GatewayIntent.GUILD_MEMBERS)
-                    .addEventListeners(new JoinListener(), new MessageListener(), new ReadyListener(), new ButtonHandler())
+                    .addEventListeners(new JoinListener(), new MessageListener(), new ReadyListener(), new ButtonHandler(), new VerificationListener())
                     .build();
         } catch (LoginException e) {
             e.printStackTrace();

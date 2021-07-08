@@ -11,13 +11,14 @@ import org.bson.Document;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
 public class Ticket {
 
     @Getter private static final Map<String, Ticket> activeTickets = new HashMap<>();
     @Getter private static final MongoCollection<Document> collection = Bot.getBot().getMongoDatabase().getCollection("tickets");
 
-    @Getter String discordId;
-    @Getter @Setter String channelId;
+    private final String discordId;
+    private final String channelId;
 
     public Ticket(String discordId, String channelId) {
         this.discordId = discordId;

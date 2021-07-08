@@ -21,7 +21,7 @@ import java.util.function.Consumer;
 
 public class Giveaway {
 
-    @Getter private static MongoCollection<Document> collection = Bot.getBot().getMongoDatabase().getCollection("giveaways");
+    @Getter private static final MongoCollection<Document> collection = Bot.getBot().getMongoDatabase().getCollection("giveaways");
 
     @Getter @Setter Long ends;
     @Getter @Setter String channelId;
@@ -126,7 +126,6 @@ public class Giveaway {
                 setFinished(true);
                 save();
             });
-
         });
 
     }

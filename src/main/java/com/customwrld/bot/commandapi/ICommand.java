@@ -5,8 +5,6 @@ import java.util.List;
 
 public interface ICommand {
 
-    CommandPermission permission();
-
     String commandName();
 
     String usage();
